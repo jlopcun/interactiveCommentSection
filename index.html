@@ -47,10 +47,7 @@
         </div>
         <p class="comment__content">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque, non sequi veritatis esse eveniet, enim quisquam aspernatur voluptate ad aut obcaecati laudantium, dolorem excepturi fugiat quidem corrupti tenetur omnis necessitatibus.</p>
       </div>
-      
     </article>
-
-
     <article class="comment" >
       <div class="comment__votes">
         <img src="images/icon-plus.svg" alt="upvote" class="comment__votes--voteIcon" data-operation="upvote">
@@ -101,7 +98,7 @@
           <img src="images/avatars/image-juliusomo.webp" alt="avatar" class="comment__avatar">
           <p class="comment__author">juliusomo</p>
           <p class="comment__ago">1 week ago</p>
-          <div class="comment__votes--replybtn" id="authorInteract">
+          <div class="comment__votes--replybtn" >
             <p class="comment__authonInteract--delete" data-operation="delete"><img class="deleteImg" src="images/icon-delete.svg">delete</p>
             <p class="comment__authonInteract--edit" data-operation="edit"><img class="editImg" src="images/icon-edit.svg" >edit</p>
           </div>
@@ -130,7 +127,7 @@
           <img src="images/avatars/image-juliusomo.webp" alt="avatar" class="comment__avatar">
           <p class="comment__author">juliusomo</p>
           <p class="comment__ago">Few minutes ago</p>
-          <div class="comment__votes--replybtn" id="authorInteract">
+          <div class="comment__votes--replybtn" >
             <p class="comment__authonInteract--delete" data-operation="delete" ><img class="deleteImg" src="images/icon-delete.svg" >delete</p>
             <p class="comment__authonInteract--edit" data-operation="edit" ><img class="editImg" src="images/icon-edit.svg" >edit</p>
           </div>
@@ -139,6 +136,16 @@
       </div>
       
     </article>
+  </template>
+  <template id="replyTemplate">
+    <form class="postComment">
+      <textarea class="postComment__comment" placeholder="writting a reply..." autocomplete="off"></textarea>
+      <img src="images/avatars/image-juliusomo.webp" alt="your-profile" class="postComment__author">
+      <div class="postDelete">
+        <button class="postComment__cancel">Cancel</button>
+        <button class="postComment__post">Reply</button>
+      </div>
+    </form>
   </template>
   <div class="attribution">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 

@@ -20,7 +20,7 @@ body{
     font-family: 'Rubik', sans-serif;
 }
 .commentContainer{
-    width:100%;
+    width:80%;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -63,8 +63,12 @@ body{
 }
 .comment__content{
     width:100%;
-    margin-bottom:1rem;
-
+    margin-bottom:3rem;
+    resize:none;
+    border:none;
+    outline:none;
+    font-family:'Rubik',sans-serif;
+    overflow:visible;
 }
 .comment__replyTo{
     color:var(--ModerateBlue);
@@ -118,8 +122,9 @@ body{
     border-radius:10px;
 
 }
+
 .postComment{
-    width:90%;
+    width:80%;
     height:20vh;
     display:flex;
     justify-content:space-between;
@@ -196,6 +201,32 @@ body{
 }
 .modalDelete__btnNo{
     background-color:var(--GrayishBlue);
+}
+.putButton{
+    position:absolute;
+    bottom:1rem;
+    right:1rem;
+    padding:1rem;
+    border:none;
+    border-radius:10px;
+    background-color:var(--GrayishBlue);
+    color:#fff;
+    cursor:pointer;
+
+}
+.replytoreply{
+    width:calc(90% - 7vw);
+    margin:0;
+    margin-left:8vw;
+}
+.postComment__cancel{
+    width:6rem;
+    height:3rem;
+    border:none;
+    border-radius:10px;
+    background-color:var(--SoftRed);
+    color:#fff;
+    cursor:pointer;
 }
 @media screen and (min-width:900px){
     .comment,.reply{

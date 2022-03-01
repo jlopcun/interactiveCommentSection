@@ -2,7 +2,7 @@ const $id = (el) => document.getElementById(el);
 
 const $commentContainer = $id('commentContainer');
 const $modalDelete = $id('modalDelete');
-let editingComment=undefined;
+const commentTemplate = $id('commentTemplate').content;
 
 
 const addObservation = () =>{
@@ -37,21 +37,62 @@ $commentContainer.addEventListener('click',(e)=>{
         "delete":()=>{
             $modalDelete.classList.add('active');
             $modalDelete.addEventListener('click',(e)=>{
-                if(e.target.textContent.includes('Yes')) $commentContainer.removeChild(parentComment);
+                if(e.target.textContent.includes('Yes')) $commentContainer.removeChild(parentComment) || "";
                 $modalDelete.classList.remove('active');
             })
             
         },
         "reply":()=>{
-            
-            $postComment.dataset.operation="reply"
-            $postComment.dataset.replyTo = parentComment.querySelector('.comment__author').textContent;
-            $postComment.querySelector('.postComment__comment').placeholder = `replying to @${$postComment.dataset.replyTo}`;
+            const replyTemplate = document.getElementById('replyTemplate').content;
+            const replyTemplateClone = replyTemplate.cloneNode(true);
+            const commentElement = replyTemplateClone.querySelector('.postComment');
+            const commentContent = commentElement.querySelector('.postComment__comment');
+            const cancleBtn = replyTemplate.querySelector('postComment__cancel');
+            if(parentComment.classList.contains('reply')) commentElement.classList.add('replytoreply')
+            const commentToInsertBefore = parentComment.nextSibling;
+            $commentContainer.insertBefore(replyTemplateClone,commentToInsertBefore);
+            commentElement.addEventListener('submit',(e)=>{
+                e.preventDefault();
+                const cloneReplyTemplate = commentTemplate.cloneNode(true);
+                const reply = cloneReplyTemplate.querySelector('.comment');
+                const span = document.createElement('span');
+                span.classList.add('comment__replyTo');
+                span.textContent = `@${parentComment.querySelector('.comment__author').textContent} `;
+                reply.classList.add('reply');
+                reply.classList.remove('comment');
+                cloneReplyTemplate.querySelector('.comment__content').textContent = commentContent.value;
+                cloneReplyTemplate.querySelector('.comment__content').prepend(span);
+                $commentContainer.replaceChild(cloneReplyTemplate,commentElement);
+                addObservation();
+            })
+            cancleBtn.addEventListener('click',()=>{
+                $commentContainer.removeChild(replyTemplateClone)
+            })
+
         },
         "edit":()=>{
-            $postComment.dataset.operation="edit";
-            editingComment=parentComment;
-            $postComment.querySelector('.postComment__comment').placeholder = `editing a comment...`;
+            const wrapper = parentComment.querySelector('.comment__wrapper');
+            const textArea = document.createElement('textarea');
+            const commentContent = wrapper.querySelector('.comment__content');
+            const mention = parentComment.querySelector('.comment__replyTo');
+            const userInfo = wrapper.querySelector('.comment__userInfo');
+            const putButton = document.createElement('button');
+            const userInteract = userInfo.querySelector('.comment__votes--replybtn');
+            putButton.classList.add('putButton');
+            putButton.textContent = 'update';
+            if(mention) commentContent.removeChild(mention)
+            textArea.classList.add('comment__content');
+            textArea.value = commentContent.textContent.trim();
+            wrapper.replaceChild(textArea,commentContent);
+            userInfo.replaceChild(putButton,userInteract);
+
+            putButton.addEventListener('click',()=>{
+                commentContent.textContent = textArea.value;
+                commentContent.prepend(mention || "");
+                wrapper.replaceChild(commentContent,textArea);
+                userInfo.replaceChild(userInteract,putButton)
+            })
+            
             
         }
     }
@@ -65,41 +106,13 @@ const $postComment = $id('postComment');
 $postComment.addEventListener('submit',(e)=>{
     e.preventDefault();
     const commentContent = $postComment.querySelector('.postComment__comment');
-    const commentTemplate = $id('commentTemplate').content;
-    if($postComment.dataset.operation==="post" && commentContent.value!==""){
+    if(commentContent.value!==""){
             const cloneCommentTemplate = commentTemplate.cloneNode(true);
 
             cloneCommentTemplate.querySelector('.comment__content').textContent=commentContent.value;
             $commentContainer.append(cloneCommentTemplate);
             commentContent.value="";
     
-    }
-    else if($postComment.dataset.operation==="reply" && commentContent.value!==""){
-        const cloneReplyTemplate = commentTemplate.cloneNode(true);
-        const reply = cloneReplyTemplate.querySelector('.comment');
-        const span = document.createElement('span');
-        span.classList.add('comment__replyTo');
-        span.textContent = `@${$postComment.dataset.replyTo} `;
-        reply.classList.add('reply');
-        reply.classList.remove('comment');
-        cloneReplyTemplate.querySelector('.comment__content').textContent = commentContent.value;
-        cloneReplyTemplate.querySelector('.comment__content').prepend(span);
-        $commentContainer.append(cloneReplyTemplate);
-        commentContent.value="";
-        $postComment.dataset.operation="post";
-        $postComment.removeAttribute('data-replyTo');
-        $postComment.querySelector('.postComment__comment').placeholder = `Add a comment...`;
-    }
-    else if($postComment.dataset.operation==="edit" && commentContent.value!==""){
-        const parent = editingComment;
-        const span = parent.querySelector('.comment__replyTo');
-        const editContent = parent.querySelector('.comment__content');
-        editContent.textContent = `${commentContent.value}`;
-        editContent.prepend(span ||"");
-        $postComment.dataset.operation="post";
-        editingComment=undefined;
-        commentContent.value="";
-        $postComment.querySelector('.postComment__comment').placeholder = `Add a comment...`;
     }
     addObservation();
 })
