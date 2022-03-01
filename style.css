@@ -18,9 +18,10 @@ body{
     width:100vw;
     min-height:100vh;
     font-family: 'Rubik', sans-serif;
+    overflow-x:hidden;
 }
 .commentContainer{
-    width:80%;
+    width:100%;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -31,7 +32,7 @@ body{
 }
 .comment,.reply{
     position:relative;
-    width:90%;
+    width:100%;
     display:flex;
     justify-content:flex-start;
     align-items: center;
@@ -80,9 +81,9 @@ body{
     flex-flow:row wrap;
     align-self:flex-start;
     gap:1rem;
-    padding:1rem;
-    margin-right:1rem;
-    margin-bottom:1rem;
+    padding:.5rem;
+    margin-right:.5rem;
+    margin-bottom:.5rem;
     background-color:var(--VeryLightGray);
     border-radius:10px;
     cursor:pointer;

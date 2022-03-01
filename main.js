@@ -13,7 +13,7 @@ const addObservation = () =>{
         })
     }
     const allComents = Array.from($commentContainer.children);
-    const observer = new IntersectionObserver(cb,{threshold:.7})
+    const observer = new IntersectionObserver(cb,{threshold:.2})
     allComents.forEach(el=>{
         observer.observe(el);
     })
@@ -47,12 +47,13 @@ $commentContainer.addEventListener('click',(e)=>{
             const replyTemplateClone = replyTemplate.cloneNode(true);
             const commentElement = replyTemplateClone.querySelector('.postComment');
             const commentContent = commentElement.querySelector('.postComment__comment');
-            const cancleBtn = replyTemplate.querySelector('postComment__cancel');
+            const cancelBtn = replyTemplate.querySelector('postComment__cancel');
             if(parentComment.classList.contains('reply')) commentElement.classList.add('replytoreply')
             const commentToInsertBefore = parentComment.nextSibling;
             $commentContainer.insertBefore(replyTemplateClone,commentToInsertBefore);
-            commentElement.addEventListener('submit',(e)=>{
+            commentElement.addEventListener('click',(e)=>{
                 e.preventDefault();
+               if(e.target.className==='postComment__post'){
                 const cloneReplyTemplate = commentTemplate.cloneNode(true);
                 const reply = cloneReplyTemplate.querySelector('.comment');
                 const span = document.createElement('span');
@@ -64,10 +65,12 @@ $commentContainer.addEventListener('click',(e)=>{
                 cloneReplyTemplate.querySelector('.comment__content').prepend(span);
                 $commentContainer.replaceChild(cloneReplyTemplate,commentElement);
                 addObservation();
+               }
+               else if(e.target.className==='postComment__cancel'){
+                $commentContainer.removeChild(commentElement)
+               }
             })
-            cancleBtn.addEventListener('click',()=>{
-                $commentContainer.removeChild(replyTemplateClone)
-            })
+            
 
         },
         "edit":()=>{
